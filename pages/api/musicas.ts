@@ -23,7 +23,7 @@ const endpointMusicas = async (
     console.error(e)
     return res
       .status(404)
-      .json({ erro: 'Ocorreu um erro ao pesquisar músicas' })
+      .json({ erro: 'Ocorreu um erro ao pesquisar, música não encontrada' })
   }
 }
 
