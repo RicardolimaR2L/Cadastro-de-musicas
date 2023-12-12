@@ -12,7 +12,7 @@ const endpointMusicas = async (
         id: req.query.id.toString()
       })
       if (!musicByIdResult) {
-        return res.status(404).json({ erro: 'Música não encontrada' })
+        return res.status(400).json({ erro: 'Música não encontrada' })
       }
       return res.status(200).json(musicByIdResult)
     } else {
@@ -22,7 +22,7 @@ const endpointMusicas = async (
   } catch (e) {
     console.error(e)
     return res
-      .status(404)
+      .status(400)
       .json({ erro: 'Ocorreu um erro ao pesquisar, música não encontrada' })
   }
 }
