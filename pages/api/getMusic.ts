@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
-import { FindmusicById, FindAllMusic } from '../services/MusicServices'
-
-const endpointMUsicas = async (
+import { FindAllMusic, FindmusicById } from '../services/MusicServices'
+const endpointMusicas = async (
   req: NextApiRequest,
   res: NextApiResponse<RespostaPadraoMsg | any>
 ) => {
@@ -12,14 +11,20 @@ const endpointMUsicas = async (
       const musicByIdResult = await FindmusicById({
         id: req.query.id.toString()
       })
+      if (!musicByIdResult) {
+        return res.status(400).json({ erro: 'Música não encontrada' })
+      }
       return res.status(200).json(musicByIdResult)
     } else {
-      const allMusicResult = await FindAllMusic()
+      const allMusicResult = await FindAllMusic(res)
       return res.status(200).json(allMusicResult)
     }
   } catch (e) {
-    console.log('Ocorreu um erro ao pesquisar músicas ', e)
+    console.error(e)
+    return res
+      .status(400)
+      .json({ erro: 'Ocorreu um erro ao pesquisar, música não encontrada' })
   }
 }
 
-export default conectarMongoDB(endpointMUsicas)
+export default conectarMongoDB(endpointMusicas)

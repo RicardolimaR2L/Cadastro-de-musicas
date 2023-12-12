@@ -41,7 +41,3 @@ const endpointCadastro = async (
 }
 
 export default conectarMongoDB(endpointCadastro)
-
-
-//to DO
-//fazer as validações em uma arquivo diferente sendo chamado como uma função em cada validação da música
