@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
-import { findAndDeleteMusic } from '../services/MusicServices'
+import { FindmusicById, findAndDeleteMusic } from '../services/MusicServices'
+import { MessagesHelper } from '../../pages/helpers/messageHelpers'
 
 const DeleteMusic = async (
   req: NextApiRequest,
@@ -12,21 +13,29 @@ const DeleteMusic = async (
 
     if (!_id) {
       return res.status(400).json({
-        erro: 'ID não encontrado ou inválido.'
-      })
-    }
-    if (!nome) {
-      return res.status(400).json({
-        erro: 'Nome da música não encontrado.'
+        erro: MessagesHelper.IdNotValid
       })
     }
 
-    const deletedMusic = await findAndDeleteMusic({ id: _id })
-    console.log(deletedMusic)
-    return res.status(200).json({ msg: 'Música excluida com sucesso' })
+    const musicaNoBanco = await FindmusicById({ id: _id })
+    if (!musicaNoBanco) {
+      return res.status(401).json({ erro: MessagesHelper.SongNotFound })
+    }
+
+    if (nome != musicaNoBanco?.nome) {
+      return res.status(401).json({ erro: MessagesHelper.NameNotFound })
+    }
+    if (!nome || nome.length < 5) {
+      return res.status(400).json({
+        erro: MessagesHelper.NameNotFound
+      })
+    }
+    const deletedMusic = await findAndDeleteMusic({ id: _id, nome: nome })
+
+    return res.status(200).json({ msg: MessagesHelper.DeleteSong })
   } catch (error) {
     console.log(error)
-    return res.status(400).json({ erro: 'ocorreu um erro ao excluir música.' })
+    return res.status(400).json({ erro: MessagesHelper.DeleteSongFailed })
   }
 }
 

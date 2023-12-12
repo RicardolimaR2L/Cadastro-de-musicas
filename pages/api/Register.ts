@@ -3,6 +3,7 @@ import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { CadastroMusica } from '../../types/cadastroMusica'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
 import { MusicasModel } from '../../models/musicaSchema'
+import { MessagesHelper } from '../../pages/helpers/messageHelpers'
 
 const endpointCadastro = async (
   req: NextApiRequest,
@@ -17,26 +18,27 @@ const endpointCadastro = async (
 
     if (!musica?.nome || musica.nome.length < minLength) {
       return res.status(401).json({
-        erro: 'Nome Iválido, o nome precisa ter no mínimo 5 caracteres'
+        erro: MessagesHelper.NameNotValid
       })
     }
     if (!musica?.url || !urlRegex.test(musica.url)) {
-      return res.status(401).json({ erro: 'Url Iválida' })
+      return res.status(401).json({ erro: MessagesHelper.UrlNotValid })
     }
     if (!musica?.descricao || musica.descricao.length < maxLength) {
       return res.status(401).json({
-        erro: 'descrição Inválida, precisa ter no mínimo 10 caracteres'
+        erro: MessagesHelper.DescriptionNotValid
       })
     }
-    const musicaASerSalva = {
+    const ObjectSong = {
       nome: musica.nome,
       url: musica.url,
       descricao: musica.descricao
     }
-    await MusicasModel.create(musicaASerSalva)
-    return res.status(200).json({ msg: 'Nova música salva com sucesso' })
+    await MusicasModel.create(ObjectSong)
+    return res.status(200).json({ msg: MessagesHelper.SavedSong })
   } catch (e) {
-    console.log('Ocorreu um erro ao cadastrar música, dados inválidos ', e)
+    console.log(e)
+    return res.status(401).json({ erro: MessagesHelper.RegisterNotValid })
   }
 }
 

@@ -1,12 +1,13 @@
 import { MusicasModel } from '../../models/musicaSchema'
 import type { NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
+import { MessagesHelper } from '../helpers/messageHelpers'
 
 type MusicParams = {
   id: string
   nome?: string
   descricao?: string
-  url?:string
+  url?: string
 }
 
 export const FindmusicById = async ({ id }: MusicParams) => {
@@ -28,7 +29,7 @@ export const FindAllMusic = async (
 ) => {
   const musicasEncontradas = await MusicasModel.find()
   if (!musicasEncontradas || musicasEncontradas.length === 0) {
-    return res.status(400).json({ erro: 'Música não encontrada' })
+    return res.status(400).json({ erro: MessagesHelper.SongNotFound })
   }
   return musicasEncontradas
 }
@@ -36,22 +37,28 @@ export const FindAllMusic = async (
 export const findAndUpdateMusic = async ({
   id,
   nome,
-  descricao, url
+  descricao,
+  url
 }: MusicParams) => {
   const musicasEncontrada = await MusicasModel.findByIdAndUpdate(
     id,
-    { nome, descricao,url},
+    { nome, descricao, url },
     { new: true }
   )
   return musicasEncontrada
 }
 
-export const findAndDeleteMusic = async (
-  { id, nome }: MusicParams,
-) => {
-  const musicaDeletada = await MusicasModel.findByIdAndDelete(id, { nome })
-  if (!musicaDeletada || musicaDeletada === null) {
-    return
+export const findAndDeleteMusic = async ({ id, nome }: MusicParams) => {
+  const musicaEncontrada = await MusicasModel.findOne({ _id: id, nome })
+  if (!musicaEncontrada || musicaEncontrada === null) {
+    return null
+  }
+  const musicaDeletada = await MusicasModel.findByIdAndDelete(id)
+  if (musicaDeletada.nome.length < 5) {
+    return null
+  }
+  if (!musicaDeletada) {
+    return null
   }
   return musicaDeletada
 }

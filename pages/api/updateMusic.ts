@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
 import { findAndUpdateMusic } from '../services/MusicServices'
+import { MessagesHelper } from '../../pages/helpers/messageHelpers'
 
 const minLength = 5
 const maxLength = 10
@@ -14,30 +15,30 @@ const UpdateMusic = async (
 
     if (!_id) {
       return res.status(400).json({
-        erro: 'Id não encontrado'
+        erro: MessagesHelper.IdNotValid
       })
     }
     if (!nome || nome.length < minLength) {
       return res.status(400).json({
-        erro: 'Nome Iválido, o nome precisa ter no mínimo 5 caracteres'
+        erro: MessagesHelper.NameNotValid
       })
     }
     if (!descricao || descricao.length < maxLength) {
       return res.status(400).json({
-        erro: 'descrição Inválida, precisa ter no mínimo 10 caracteres'
+        erro: MessagesHelper.DescriptionNotValid
       })
     }
-    const musicaAtualizada = await findAndUpdateMusic({
+    const UpdatedSong = await findAndUpdateMusic({
       id: _id,
       nome,
       descricao,
       url
     })
-    
-    return res.status(200).json({ msg: 'música atualizada com sucesso' })
+
+    return res.status(200).json({ msg: MessagesHelper.UpdatedSong })
   } catch (error) {
     console.log(error)
-    return res.status(400).json({ erro: 'ocorreu um erro ao atualizar música' })
+    return res.status(400).json({ erro: MessagesHelper.UpdateSongFailed })
   }
 }
 

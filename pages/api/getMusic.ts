@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
 import { FindAllMusic, FindmusicById } from '../services/MusicServices'
+import { MessagesHelper } from '../../pages/helpers/messageHelpers'
+
 const endpointMusicas = async (
   req: NextApiRequest,
   res: NextApiResponse<RespostaPadraoMsg | any>
@@ -12,7 +14,7 @@ const endpointMusicas = async (
         id: req.query.id.toString()
       })
       if (!musicByIdResult) {
-        return res.status(400).json({ erro: 'Música não encontrada' })
+        return res.status(400).json({ erro: MessagesHelper.SongNotFound })
       }
       return res.status(200).json(musicByIdResult)
     } else {
@@ -23,7 +25,7 @@ const endpointMusicas = async (
     console.error(e)
     return res
       .status(400)
-      .json({ erro: 'Ocorreu um erro ao pesquisar, música não encontrada' })
+      .json({ erro: MessagesHelper.SongsNotFound })
   }
 }
 
