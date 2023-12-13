@@ -1,6 +1,6 @@
-import { MusicasModel } from '../../models/musicaSchema'
+import { MusicasModel } from '../models/musicaSchema'
 import type { NextApiResponse } from 'next'
-import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
+import type { RespostaPadraoMsg } from '../types/respostaPadrao'
 import { MessagesHelper } from '../helpers/messageHelpers'
 
 type MusicParams = {

@@ -3,7 +3,7 @@ import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { CadastroMusica } from '../../types/cadastroMusica'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
 import { MusicasModel } from '../../models/musicaSchema'
-import { MessagesHelper } from '../../pages/helpers/messageHelpers'
+import { MessagesHelper } from '../../helpers/messageHelpers'
 
 const endpointCadastro = async (
   req: NextApiRequest,

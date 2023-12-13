@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
-import { FindAllMusic, FindmusicById } from '../services/MusicServices'
-import { MessagesHelper } from '../../pages/helpers/messageHelpers'
+import { FindAllMusic, FindmusicById } from '../../services/MusicServices'
+import { MessagesHelper } from '../../helpers/messageHelpers'
 
 const endpointMusicas = async (
   req: NextApiRequest,
@@ -23,9 +23,7 @@ const endpointMusicas = async (
     }
   } catch (e) {
     console.error(e)
-    return res
-      .status(400)
-      .json({ erro: MessagesHelper.SongsNotFound })
+    return res.status(400).json({ erro: MessagesHelper.SongsNotFound })
   }
 }
 

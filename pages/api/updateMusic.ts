@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
-import { findAndUpdateMusic } from '../services/MusicServices'
-import { MessagesHelper } from '../../pages/helpers/messageHelpers'
+import { findAndUpdateMusic } from '../../services/MusicServices'
+import { MessagesHelper } from '../../helpers/messageHelpers'
 
 const minLength = 5
 const maxLength = 10

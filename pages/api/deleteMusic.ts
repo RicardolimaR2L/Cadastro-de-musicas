@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { RespostaPadraoMsg } from '../../types/respostaPadrao'
 import { conectarMongoDB } from '../../middlewares/conectarMongoDb'
-import { FindmusicById, findAndDeleteMusic } from '../services/MusicServices'
-import { MessagesHelper } from '../../pages/helpers/messageHelpers'
+import { FindmusicById, findAndDeleteMusic } from '../../services/MusicServices'
+import { MessagesHelper } from '../../helpers/messageHelpers'
 
 const DeleteMusic = async (
   req: NextApiRequest,
